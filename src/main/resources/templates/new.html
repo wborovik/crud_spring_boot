@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>New User</title>
+</head>
+<body>
+
+<div class="main">
+    <div class="field">
+        <form class="log" th:action="@{/logout}" method="POST">
+            <button type="submit">Sign Out</button>
+        </form> <!--делаем логаут-->
+
+        <br/>
+        <form th:method="POST" th:action="@{/}" th:object="${user}">
+            <label for="name">Name: </label>
+            <input type="text" th:field="*{name}" id="name"/>
+            <br/>
+            <label for="surname">Surname: </label>
+            <input type="text" th:field="*{surname}" id="surname"/>
+            <br/>
+            <label for="email">Email: </label>
+            <input type="text" th:field="*{email}" id="email"/>
+            <br/>
+            <label for="password">Password: </label>
+            <input type="text" th:field="*{password}" id="password"/>
+            <br/>
+
+            <div>
+                <label>Roles: </label>
+                <br/>
+                <input type=checkbox id=adminId name=roleAdmin value="ROLE_ADMIN">
+                <label for="adminId">Admin______________________</label>
+                <br/>
+                <input type=checkbox id=userId name=roleUser value="ROLE_USER">
+                <label for="adminId">User________________________</label>
+
+            </div>
+
+            <br/>
+            <input type="submit" value="Create!"/>
+        </form>
+    </div>
+</div>
+
+<style>
+    .field {
+        clear: both;
+        text-align: right;
+        line-height: 25px;
+    }
+
+    label {
+        float: left;
+        padding-right: 10px;
+    }
+
+    .main {
+        float: left;
+        margin: 20px
+    }
+</style>
+
+</body>
+</html>
+
+
+

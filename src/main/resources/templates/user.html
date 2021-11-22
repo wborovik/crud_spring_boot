@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<div>
+    <form class="log" th:action="@{/logout}" method="POST">
+        <button type="submit">Sign Out</button>
+    </form> <!--делаем логаут-->
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Role</th>
+        </tr>
+        <tr>
+            <td th:utext="${user.id}"></td>
+            <td th:utext="${user.name}"></td>
+            <td th:utext="${user.surname}"></td>
+            <td th:utext="${user.email}"></td>
+            <td>
+                <div th:each="role: ${user.getRoles()}">
+                    <span th:if="(${role.getRole()} == 'ROLE_ADMIN')" th:utext="Admin"></span>
+                    <span th:if="(${role.getRole()} == 'ROLE_USER')" th:utext="User"></span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <style>
+        table {
+            width: 60%;
+            border: 4px double black;
+            border-collapse: collapse;
+            margin: 20px;
+        }
+
+        th {
+            text-align: left;
+            background: #ccc;
+            padding: 5px;
+            border: 1px solid black;
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        h2 {
+            margin: 20px
+        }
+
+        .log {
+            margin: 20px;
+        }
+
+    </style>
+</div>
+</body>
+</html>

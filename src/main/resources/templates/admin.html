@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<div>
+    <form class="log" th:action="@{/logout}" method="POST">
+        <button type="submit">Sign Out</button>
+    </form> <!--делаем логаут-->
+
+    <div class="switch">
+        <form action="/admin">
+            <button>Admin</button>
+        </form>
+        <form action="admin/user">
+            <button>User</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:utext="${user.id}"></td>
+            <td th:utext="${user.name}"></td>
+            <td th:utext="${user.surname}"></td>
+            <td th:utext="${user.email}"></td>
+            <td>
+                <div th:each="role: ${user.getRoles()}">
+                    <span th:if="(${role.getRole()} == 'ROLE_ADMIN')" th:utext="Admin"></span>
+                    <span th:if="(${role.getRole()} == 'ROLE_USER')" th:utext="User"></span>
+                </div>
+            </td>
+
+            <td class="butt">
+                <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.id})}">
+                    <button>Edit</button>
+                </form>
+
+            </td>
+            <td class="butt">
+                <form th:method="DELETE" th:action="@{/{id}(id=${user.id})}">
+                    <input type="submit" value="Delete"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <h2><a href="admin/new">Add new user</a></h2>
+
+    <style>
+        table {
+            width: 60%;
+            border: 4px double black;
+            border-collapse: collapse;
+            margin: 20px;
+        }
+
+        th {
+            text-align: left;
+            background: #ccc;
+            padding: 5px;
+            border: 1px solid black;
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        h2 {
+            margin: 20px
+        }
+
+        form {
+            margin-left: 5px;
+        }
+
+        td.butt {
+
+            background: #ccc;
+        }
+
+        .log {
+            margin: 20px;
+        }
+
+        .switch {
+            display: flex;
+            margin: 15px;
+        }
+
+    </style>
+
+</div>
+</body>
+</html>
