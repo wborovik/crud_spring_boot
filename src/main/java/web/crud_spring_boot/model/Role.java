@@ -24,7 +24,7 @@ public class Role implements GrantedAuthority {
     @Column
     private String role;
 
-   /*@ManyToMany(mappedBy = "roles")
+/*@ManyToMany(mappedBy = "roles")
     private Set<User> user;*/
 
     @Override
