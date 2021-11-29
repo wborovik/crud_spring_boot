@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Column
     private String surname;
 
-    @Column //(unique = true)
+    @Column (unique = true)
     private String email;
 
     @Column
@@ -41,6 +41,13 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    public User(String name, String surname, String email, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

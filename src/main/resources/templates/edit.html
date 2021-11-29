@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -10,10 +10,11 @@
     <div class="field">
         <form class="log" th:action="@{/logout}" method="POST">
             <button type="submit">Sign Out</button>
-        </form> <!--делаем логаут-->
+        </form> &lt;!&ndash;делаем логаут&ndash;&gt;
 
         <br/>
         <form th:method="PATCH" th:action="@{/{id}(id=${user.id})}" th:object="${user}">
+            <br/>
             <label for="name">Name: </label>
             <input type="text" th:field="*{name}" id="name"/>
             <br/>
@@ -26,7 +27,6 @@
             <label for="password">Password: </label>
             <input type="text" th:field="*{password}" id="password"/>
             <br/>
-
             <div>
                 <label>Roles: </label>
                 <br/>
@@ -60,4 +60,4 @@
     }
 </style>
 </body>
-</html>
+</html>-->

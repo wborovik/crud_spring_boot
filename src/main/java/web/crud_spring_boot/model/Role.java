@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-//import java.util.Set;
 
 @Data
 @Builder
@@ -30,5 +29,19 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return role;
+    }
+
+    @Override
+    public String toString() {
+
+        if (role.equals("ROLE_ADMIN")) {
+            return "ADMIN";
+        }
+
+        if (role.equals("ROLE_USER")) {
+            return "USER";
+        }
+
+        return "";
     }
 }

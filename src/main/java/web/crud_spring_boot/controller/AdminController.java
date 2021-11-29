@@ -13,6 +13,7 @@ import web.crud_spring_boot.service.UserService;
 
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -28,9 +29,11 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String adminPanel(Model model) {
+    public String adminPanel(Model model, Principal principal) {
         model.addAttribute("users", userService.getAllUsers());
-        // model.addAttribute("role", roleService.getAllRoles());
+        model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
+        model.addAttribute("allRoles", roleService.getAllRoles());
+        model.addAttribute("newUser", new User());
         return "admin";
     }
 
@@ -49,20 +52,12 @@ public class AdminController {
 
     @PostMapping()
     public String saveUser(@ModelAttribute("user") @Validated User user,
-                           @RequestParam(required = false) String roleAdmin,
-                           @RequestParam(required = false) String roleUser,
+                           @RequestParam("addRole") List<String> addRole,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "new";
 
-        Set<Role> roles = new HashSet<>();
-
-        if (roleAdmin != null && roleAdmin.equals("ROLE_ADMIN")) {
-            roles.add(roleService.getRoleByName("ROLE_ADMIN"));
-        }
-        if (roleUser != null && roleUser.equals("ROLE_USER")) {
-            roles.add(roleService.getRoleByName("ROLE_USER"));
-        }
+        Set<Role> roles = userService.getRolesForSet(addRole);
 
         user.setRoles(roles);
         userService.createUser(user);
@@ -72,30 +67,25 @@ public class AdminController {
 
     @GetMapping("admin/{id}/edit")
     public String editUser(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userService.readUser(id));
 
-        return "edit";
+        model.addAttribute("user", userService.readUser(id));
+        model.addAttribute("allRoles", roleService.getAllRoles());
+
+        return "admin";
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("admin/edit/{id}")
     public String updateUser(@ModelAttribute("user") @Validated User user,
-                             @RequestParam(required = false) String roleAdmin,
-                             @RequestParam(required = false) String roleUser,
-                             BindingResult bindingResult,
+                             @RequestParam("editName") String name,
+                             @RequestParam("editSurname") String surname,
+                             @RequestParam("editEmail") String email,
+                             @RequestParam("editPassword") String password,
+                             @RequestParam("editRole") List<String> editRole,
                              @PathVariable("id") Long id) {
 
-        if (bindingResult.hasErrors())
-            return "edit";
+        Set<Role> roles = userService.getRolesForSet(editRole);
 
-        Set<Role> roles = new HashSet<>();
-
-        if (roleAdmin != null && roleAdmin.equals("ROLE_ADMIN")) {
-            roles.add(roleService.getRoleByName("ROLE_ADMIN"));
-        }
-        if (roleUser != null && roleUser.equals("ROLE_USER")) {
-            roles.add(roleService.getRoleByName("ROLE_USER"));
-        }
-
+        user = new User(name, surname, email, password);
         user.setRoles(roles);
         userService.editUser(id, user);
 
@@ -111,12 +101,5 @@ public class AdminController {
     @GetMapping(value = "/login")
     public String getLoginPage() {
         return "login";
-    }
-
-    @GetMapping("admin/user")
-    public String userPage(Model model, Principal principal) {
-        User user = userService.getUserByEmail(principal.getName());
-        model.addAttribute("user", user);
-        return "admin-user";
     }
 }

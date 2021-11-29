@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
@@ -10,12 +11,12 @@
     <div class="field">
         <form class="log" th:action="@{/logout}" method="POST">
             <button type="submit">Sign Out</button>
-        </form> <!--делаем логаут-->
+        </form> &lt;!&ndash;делаем логаут&ndash;&gt;
 
         <br/>
         <form th:method="POST" th:action="@{/}" th:object="${user}">
             <label for="name">Name: </label>
-            <input type="text" th:field="*{name}" id="name"/>
+            <input type="text" th:field="*{name}" id="name" placeholder="Enter name"/>
             <br/>
             <label for="surname">Surname: </label>
             <input type="text" th:field="*{surname}" id="surname"/>
@@ -64,6 +65,7 @@
 
 </body>
 </html>
+-->
 
 
 

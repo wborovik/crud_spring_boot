@@ -6,10 +6,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import web.crud_spring_boot.model.Role;
 import web.crud_spring_boot.model.User;
 import web.crud_spring_boot.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -17,11 +20,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
@@ -64,5 +69,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public Set<Role> getRolesForSet(List<String> rolesId) {
+
+        Set<Role> roleSet = new HashSet<>();
+        for (String id : rolesId) {
+            roleSet.add(roleService.getRoleById(Long.parseLong(id)));
+        }
+        return roleSet;
     }
 }

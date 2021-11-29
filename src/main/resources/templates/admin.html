@@ -1,106 +1,197 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
+<head th:replace="fragments/base :: head(~{::title})">
+
+    <title>Admin panel</title>
 </head>
 <body>
-<div>
-    <form class="log" th:action="@{/logout}" method="POST">
-        <button type="submit">Sign Out</button>
-    </form> <!--делаем логаут-->
 
-    <div class="switch">
-        <form action="/admin">
-            <button>Admin</button>
-        </form>
-        <form action="admin/user">
-            <button>User</button>
-        </form>
-    </div>
+<div th:replace="fragments/base :: header"></div>
 
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-        <tr th:each="user : ${users}">
-            <td th:utext="${user.id}"></td>
-            <td th:utext="${user.name}"></td>
-            <td th:utext="${user.surname}"></td>
-            <td th:utext="${user.email}"></td>
-            <td>
-                <div th:each="role: ${user.getRoles()}">
-                    <span th:if="(${role.getRole()} == 'ROLE_ADMIN')" th:utext="Admin"></span>
-                    <span th:if="(${role.getRole()} == 'ROLE_USER')" th:utext="User"></span>
+<div class="container-fluid d-flex flex-row vh-100 p-0">
+
+    <div th:replace="fragments/base :: navigation(page='admin')"></div>
+
+    <div class="flex-grow-1 bg-light p-3">
+        <h1>Admin panel</h1>
+
+        <!--<ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#home">Users table</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#menu1">New User</a>
+            </li>
+        </ul>-->
+
+        <nav>
+            <div class="nav nav-tabs border-bottom-0" id="nav-tab" role="tablist">
+                <a class="nav-link active" id="nav-users_table-link" data-toggle="tab" href="#admin"
+                   role="tab" aria-controls="nav-users_table">Users table</a>
+                <a class="nav-link" id="nav-user_form-link" data-toggle="tab" href="#newUser"
+                   role="tab" aria-controls="nav-user_form">New user</a>
+            </div>
+        </nav>
+
+
+        <div class="tab-content">
+            <div id="admin" class="tab-pane active bg-white ml-0 mr-0 p-0 border">
+                <nav class="navbar navbar-default bg-light mr-0 ml-0 border">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand disables text-dark text-style-bold">All users</a>
+                        </div>
+                    </div>
+                </nav>
+                <div class="m-4">
+                    <table class="table table-striped border">
+
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:utext="${user.id}"></td>
+                            <td th:utext="${user.name}"></td>
+                            <td th:utext="${user.surname}"></td>
+                            <td th:utext="${user.email}"></td>
+                            <td>
+                                <div th:each="role: ${user.getRoles()}">
+                                    <span th:if="(${role.getRole()} == 'ROLE_ADMIN')" th:utext="ADMIN"></span>
+                                    <span th:if="(${role.getRole()} == 'ROLE_USER')" th:utext="USER"></span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <!--<a class="btn btn-info" role="button"
+                                   data-toggle="modal"
+                                   data-target="#modalEdit"
+                                   th:attrappend="data-target=${user.id}"
+                                >Edit</a>-->
+
+                                <a type="button" class="btn btn-info editButton" data-toggle="modal"
+                                   th:attr="data-target='#editModal' + ${user.getId()}">
+                                    Edit</a>
+
+                                <div th:replace="fragments/edit-form :: edit-form"></div>
+                            </td>
+
+                            <td>
+                                <a type="button" class="btn btn-danger" data-toggle="modal"
+                                   th:attr="data-target='#deleteModal' + ${user.getId()}">
+                                    Delete</a>
+
+                                <div th:replace="fragments/delete-form :: delete-form"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </td>
+            </div>
 
-            <td class="butt">
-                <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.id})}">
-                    <button>Edit</button>
-                </form>
 
-            </td>
-            <td class="butt">
-                <form th:method="DELETE" th:action="@{/{id}(id=${user.id})}">
-                    <input type="submit" value="Delete"/>
-                </form>
-            </td>
-        </tr>
-    </table>
+            <div th:replace="fragments/new-user :: new-user"></div>
 
-    <h2><a href="admin/new">Add new user</a></h2>
+            <!--<div id="newUser" class="pl-0 pr-0 tab-pane fade border bg-white rounded">
+                <nav class="navbar navbar-default bg-light mr-0 ml-0 border">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <div class="navbar-brand disables text-dark text-style-bold">Add new user</div>
+                        </div>
+                    </div>
+                </nav>
 
-    <style>
-        table {
-            width: 60%;
-            border: 4px double black;
-            border-collapse: collapse;
-            margin: 20px;
-        }
+                <div class="container mt-3">
 
-        th {
-            text-align: left;
-            background: #ccc;
-            padding: 5px;
-            border: 1px solid black;
-        }
+                    <form th:method="POST" th:action="@{/}" th:object="${newUser}"
+                          class="ml-auto mr-auto d-flex flex-column justify-content-center align-items-center col-5">
 
-        td {
-            padding: 10px;
-            border: 1px solid black;
-        }
+                        <div class="form-group">
+                            <label for="name" class="d-flex justify-content-center font-weight-bold">Name:</label>
+                            <input type="text" placeholder="Enter name" th:field="*{name}" class="form-control" id="name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname"
+                                   class="d-flex justify-content-center font-weight-bold">Surname:</label>
+                            <input type="text" th:field="*{surname}" class="form-control" id="surname"
+                                   placeholder="Enter surname"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="d-flex justify-content-center font-weight-bold">Email:</label>
+                            <input type="text" th:field="*{email}" class="form-control" id="email"
+                                   placeholder="Enter email"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password"
+                                   class="d-flex justify-content-center font-weight-bold">Password:</label>
+                            <input type="text" th:field="*{password}" class="form-control" id="password"
+                                   placeholder="Enter password"/>
+                        </div>
 
-        h2 {
-            margin: 20px
-        }
 
-        form {
-            margin-left: 5px;
-        }
-
-        td.butt {
-
-            background: #ccc;
-        }
-
-        .log {
-            margin: 20px;
-        }
-
-        .switch {
-            display: flex;
-            margin: 15px;
-        }
-
-    </style>
-
+                        <div class="form-group">
+                            <label for="role" class="d-flex justify-content-center font-weight-bold">Role</label>
+                            <select multiple class="form-control" id="role" size="2" style="width: 210px;"
+                                    name="addRole">
+                                <option
+                                        th:each="role : ${allRoles}"
+                                        th:text="${role.role}"
+                                        th:value="${role.id}">
+                                </option>
+                            </select>
+                        </div>
+                        <button type="submit" class="d-flex justify-content-center btn btn-success">Add new user
+                        </button>
+                        <br/>
+                    </form>
+                </div>
+            </div>-->
+        </div>
+    </div>
 </div>
+
+
+<div th:replace="fragments/base :: js"></div>
+
+
+<style>
+
+    form {
+        margin-left: 5px;
+    }
+
+    td.butt {
+
+        background: #ccc;
+    }
+
+    .log {
+        margin: 20px;
+    }
+
+    .switch {
+        display: flex;
+        margin: 15px;
+    }
+
+    .btn-group-vertical {
+        width: 14.5vw;
+        padding-top: 12px;
+    }
+
+    .btn {
+        text-align: left;
+    }
+
+</style>
+
 </body>
 </html>

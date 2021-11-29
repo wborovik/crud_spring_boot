@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:fragment="edit-form" class="editModalForm" id="editModal">
+    <form action="#" th:method="PATCH" th:action="@{'/admin/edit/'+${user.id}}">
+        <div class="modal fade" th:id="editModal + ${user.id}" tabindex="-1"
+             aria-labelledby="editModalLabel" aria-hidden="true" th:object="${user}">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="editModalLabel"
+                            style="text-align: left">Edit user</h4>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group container col-6 text-center">
+                            <div class="form-group text-center">
+                                <label class="col-form-label" for="editId">ID:</label>
+                                <input class="form-control" id="editId" name="editId"
+                                       type="text"
+                                       th:value="${user.id}" readonly/>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label"
+                                       for="editName">Name:</label>
+                                <input class="form-control" id="editName"
+                                       name="editName"
+                                       type="text" th:value="${user.name}"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="editSurname">Surname:</label>
+                                <input class="form-control" id="editSurname"
+                                       name="editSurname"
+                                       type="text" th:value="${user.surname}"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label"
+                                       for="editEmail">Email:</label>
+                                <input class="form-control" id="editEmail"
+                                       name="editEmail"
+                                       type="text" th:value="${user.email}"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="editPassword">Password:</label>
+                                <input class="form-control" id="editPassword"
+                                       name="editPassword"
+                                       type="text" th:value="${user.password}"/>
+                            </div>
+
+                            <!--<div class="form-group">
+                                <label class="col-form-label" for="adminId">Role:</label>
+                                <select class="form-control" id="adminId"
+                                        th:name="roleEdit" required>
+                                    <option th:value="admin">ADMIN</option>
+                                    <option th:value="user">USER</option>
+                                    <option th:value="adminAndUser">ADMIN & USER</option>
+                                </select>
+                            </div>-->
+
+                            <div class="form-group">
+                            <label class="col-form-label" for="adminId">Role:</label>
+                            <select class="form-control" id="adminId" size="2"
+                                    th:name="editRole" multiple>
+
+                           <!-- <div class="form-group">
+                                <label for="adminId" class="d-flex justify-content-center font-weight-bold">Role:</label>
+                                <select multiple class="form-control"  id="adminId" size="2"
+                                        name="editRole">-->
+                                <option th:each="role : ${allRoles}"
+                                        th:text="${role.role}"
+                                        th:value="${role.id}"
+                                        th:selected="${user.roles.contains(role)}">
+                                </option>
+                                <!--<option th:value="user">USER</option>
+                                <option th:value="adminAndUser">ADMIN & USER</option>-->
+                            </select>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Close
+                                </button>
+                                <input type="submit" class="btn btn-primary"
+                                       value="Edit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
